@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class Todo implements Serializable{
@@ -17,6 +20,7 @@ public class Todo implements Serializable{
 	private Long id;
 	private String description;
 	private Boolean done;
+	@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss", timezone="GMT-3")
 	private LocalDateTime createdDate;
 	private LocalDateTime doneDate;
 	
@@ -71,6 +75,11 @@ public class Todo implements Serializable{
 
 	public void setDoneDate(LocalDateTime doneDate) {
 		this.doneDate = doneDate;
+	}
+	
+	@PrePersist
+	public void beforesave() {
+		setCreatedDate(LocalDateTime.now());
 	}
 
 	@Override
